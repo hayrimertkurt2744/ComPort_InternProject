@@ -46,17 +46,12 @@ namespace ComPort
 
         private void ShowData(object sender, string dataIn)
         {
-            int[] dataInDec = comm.TakeDataBufferInDec();
-
-            string dataInFormatted = comm.DataFormat(dataInDec, cBoxReceiveFormat.Text);
-
-            MessageBox.Show(dataInFormatted);
+            
             MessageBox.Show(dataIn);
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            Control.CheckForIllegalCrossThreadCalls = false;
             buttonClose.Enabled = false;
         }
         private void buttonSend_Click(object sender, EventArgs e)
