@@ -12,9 +12,8 @@ namespace ComPort
 
         public SerialPort serialPort;
         public string[] ports;
-        public int[] dataInDec;
-        public int dataInLength;
         string dataFormat;
+        List<int> dataBuffer = new List<int>();
 
         public EventHandler<string> dataReceivedEventHandler;
 
@@ -35,24 +34,11 @@ namespace ComPort
 
         private void DataReceivedFunction(object sender, SerialDataReceivedEventArgs e)
         {
-            //string readData =  serialPort.ReadExisting();
-            List<int> dataBuffer = new List<int>();
-            while (serialPort.BytesToRead > 0) 
-            {
-                try
-                {
-                    dataBuffer.Add(serialPort.ReadByte());
-                }
-                catch (Exception error)
-                {
-                    Console.WriteLine(error.Message);
-                   
-                }
-            }
-            dataInLength = dataBuffer.Count();
-            dataInDec = new int[dataInLength];
-            dataInDec = dataBuffer.ToArray();
-            dataReceivedEventHandler.Invoke(this, DataFormat(dataInDec,dataFormat));
+            string readData =  serialPort.ReadExisting();
+            
+            
+            
+            dataReceivedEventHandler.Invoke(this, /*DataFormat(dataInDec,dataFormat)*/readData);
         }
 
         public void OpenPort()
@@ -111,7 +97,29 @@ namespace ComPort
             }
             return strOut;
         }
+        public int[] TakeDataBufferInDec() 
+        {
+            
+            int dataInLength = dataBuffer.Count();
 
+            int[] dataInDec = new int[dataInLength];
+            dataInDec = dataBuffer.ToArray();
 
+            while (serialPort.BytesToRead > 0)
+            {
+                try
+                {
+                    dataBuffer.Add(serialPort.ReadByte());
+                }
+                catch (Exception error)
+                {
+                    Console.WriteLine(error.Message);
+
+                }
+            }
+            return dataInDec;
+        }
+
+        
     }
 }
