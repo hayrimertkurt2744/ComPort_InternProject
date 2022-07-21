@@ -13,21 +13,15 @@ namespace ComPort
         public SerialPort serialPort;
         public string[] ports;
         public string dataFormat;
-        //string formattedData;
-        //public string formattedString;
         List<int> dataBuffer = new List<int>();
 
         public event EventHandler<string> dataReceivedEventHandler;
         
 
-        public SerialCommunications(string _PortName, string _BaudRate, string _DataBits, string _StopBitsText, string _ParityText/*, cBoxReceiveFormat.Text*/)//constructor
+        public SerialCommunications(string _PortName, string _BaudRate, string _DataBits, string _StopBitsText, string _ParityText)//constructor
         {
             serialPort = new SerialPort();
-           
-            
-           
-            //dataFormat = _DataFormat;
-            
+     
             serialPort.DataReceived += DataReceivedFunction;
             serialPort.PortName = _PortName;
             serialPort.BaudRate = Convert.ToInt32(_BaudRate);
@@ -43,7 +37,7 @@ namespace ComPort
             string readData = serialPort.ReadExisting();
             
             
-            dataReceivedEventHandler.Invoke(this, /*DataFormat(dataInDec,dataFormat)*/readData);
+            dataReceivedEventHandler.Invoke(this,readData);
         }
 
         public void OpenPort()
@@ -70,93 +64,91 @@ namespace ComPort
 
         }
 
-
         public static string[] GetPortNames()
         {
             return SerialPort.GetPortNames();
         }
-        public /*void*/string DataFormat(/*object sender,*/ string dataFormat) 
+
+        public string FormatReceivedData(string dataIn, int _sendTypeController)
         {
-            string strOut = "";
-            
-            /*
-            if (dataFormat=="Hex")
+            switch (_sendTypeController)
             {
-                foreach (int element in TakeDataBufferInDec())
-                {
-                    strOut += Convert.ToString(element, 16) + "\t";
-                }
-            }
-            else if(dataFormat == "Binary")
-            {
-                foreach (int element in TakeDataBufferInDec())
-                {
-                    strOut += Convert.ToString(element, 2) + "\t";
-                }
-            }
-            else if (dataFormat == "ASCII")
-            {
-                foreach (int element in TakeDataBufferInDec())
-                {
-                    strOut += Convert.ToChar(element) + "\t";
-                }
-            }*/
-
-            switch (dataFormat)
-            {
-                case "Hex":
-                    foreach (int element in TakeDataBufferInDec())
-                    {
-                        strOut += Convert.ToString(element, 16) + "\t";
-                    }
+                case 0:
+                    Console.WriteLine("It is a hex");
+                    byte[] ba = Encoding.Default.GetBytes(dataIn);
+                    var hexString = BitConverter.ToString(ba);
+                    dataIn = hexString;
                     break;
-
-                case "Binary":
-                    foreach (int element in TakeDataBufferInDec())
-                    {
-                        strOut += Convert.ToString(element, 2) + "\t";
-                    }
+                case 1:
+                    Console.WriteLine("It is an Ascii");
                     break;
-
-                case "ASCII":
-                    foreach (int element in TakeDataBufferInDec())
-                    {
-                        strOut += Convert.ToChar(element) + "\t";
-                    }
+                case 2:
+                    Console.WriteLine("It is an Binary");
+                    byte[] da = Encoding.Default.GetBytes(dataIn);
+                    string formattedDataIn = string.Join("  ", da.Select(byt => Convert.ToString(byt, 2).PadLeft(8, '0')));
+                    dataIn = formattedDataIn;
                     break;
-
                 default:
-                    Console.WriteLine("There is no chosen option");
                     break;
+
             }
-            /*strOut = formattedString;*/
-            return strOut;
+            return dataIn;
         }
-        public int[] TakeDataBufferInDec() 
+
+
+        public string FormatSendingData(string _dataOut, string _sendTypeController) 
         {
-            
-            int dataInLength = dataBuffer.Count();
-
-            int[] dataInDec = new int[dataInLength];
-            dataInDec = dataBuffer.ToArray();
-            if (serialPort.IsOpen)
+            if (_sendTypeController == "Hex")
             {
-                while (serialPort.BytesToRead > 0)
-                {
-                    try
-                    {
-                        dataBuffer.Add(serialPort.ReadByte());
-                    }
-                    catch (Exception error)
-                    {
-                        Console.WriteLine(error.Message);
+                string hex = _dataOut;
 
-                    }
+                String ascii = "";
+                for (int i = 0; i < hex.Length; i += 2)
+                {
+                    String part = hex.Substring(i, 2);
+                    char ch = (char)Convert.ToInt32(part, 16); ;
+                    ascii = ascii + ch;
                 }
+                _dataOut = ascii;
             }
-           
-            return dataInDec;
+            else if (_sendTypeController == "Binary")
+            {
+                _dataOut = BinaryToASCII(_dataOut);
+            }
+            else if (_sendTypeController == "Ascii")
+            {
+                Console.WriteLine("This Workss");
+            }
+
+
+            return _dataOut;
         }
-       
+        public static string BinaryToASCII(string bin)
+        {
+            bin = bin.Replace(" ", "");
+            string ascii = string.Empty;
+
+            for (int i = 0; i < bin.Length; i += 8)
+            {
+                ascii += (char)BinaryToDecimal(bin.Substring(i, 8));
+            }
+
+            return ascii;
+        }
+
+        private static int BinaryToDecimal(string bin)
+        {
+            int binLength = bin.Length;
+            double dec = 0;
+
+            for (int i = 0; i < binLength; ++i)
+            {
+                dec += ((byte)bin[i] - 48) * Math.Pow(2, ((binLength - i) - 1));
+            }
+
+            return (int)dec;
+        }
+
     }
+    
 }

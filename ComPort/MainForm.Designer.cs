@@ -209,7 +209,7 @@ namespace ComPort
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(6, 18);
+            this.label6.Location = new System.Drawing.Point(6, 53);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(67, 13);
             this.label6.TabIndex = 13;
@@ -218,7 +218,7 @@ namespace ComPort
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(6, 16);
+            this.label7.Location = new System.Drawing.Point(6, 48);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(82, 13);
             this.label7.TabIndex = 15;
@@ -302,7 +302,7 @@ namespace ComPort
             this.groupBox1.Controls.Add(this.rButtonReceiveHex);
             this.groupBox1.Controls.Add(this.rButtonReceiveAscii);
             this.groupBox1.Controls.Add(this.rButtonReceiveBinary);
-            this.groupBox1.Location = new System.Drawing.Point(541, 15);
+            this.groupBox1.Location = new System.Drawing.Point(541, 12);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(199, 111);
             this.groupBox1.TabIndex = 22;
@@ -315,7 +315,7 @@ namespace ComPort
             this.groupBox2.Controls.Add(this.label6);
             this.groupBox2.Controls.Add(this.rButtonSendBinary);
             this.groupBox2.Controls.Add(this.rButtonSendHex);
-            this.groupBox2.Location = new System.Drawing.Point(301, 12);
+            this.groupBox2.Location = new System.Drawing.Point(302, 12);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(200, 111);
             this.groupBox2.TabIndex = 23;
