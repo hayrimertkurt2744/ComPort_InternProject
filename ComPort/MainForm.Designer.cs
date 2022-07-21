@@ -44,10 +44,18 @@ namespace ComPort
             this.buttonSend = new System.Windows.Forms.Button();
             this.buttonClose = new System.Windows.Forms.Button();
             this.tBoxDataIn = new System.Windows.Forms.TextBox();
-            this.cBoxSendFormat = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.cBoxReceiveFormat = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
+            this.rButtonReceiveHex = new System.Windows.Forms.RadioButton();
+            this.rButtonReceiveAscii = new System.Windows.Forms.RadioButton();
+            this.rButtonReceiveBinary = new System.Windows.Forms.RadioButton();
+            this.rButtonSendBinary = new System.Windows.Forms.RadioButton();
+            this.rButtonSendAscii = new System.Windows.Forms.RadioButton();
+            this.rButtonSendHex = new System.Windows.Forms.RadioButton();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonOpen
@@ -162,10 +170,10 @@ namespace ComPort
             // 
             // tBoxDataOut
             // 
-            this.tBoxDataOut.Location = new System.Drawing.Point(299, 60);
+            this.tBoxDataOut.Location = new System.Drawing.Point(302, 132);
             this.tBoxDataOut.Multiline = true;
             this.tBoxDataOut.Name = "tBoxDataOut";
-            this.tBoxDataOut.Size = new System.Drawing.Size(209, 225);
+            this.tBoxDataOut.Size = new System.Drawing.Size(199, 179);
             this.tBoxDataOut.TabIndex = 9;
             this.tBoxDataOut.Text = "   ";
             // 
@@ -191,64 +199,136 @@ namespace ComPort
             // 
             // tBoxDataIn
             // 
-            this.tBoxDataIn.Location = new System.Drawing.Point(572, 63);
+            this.tBoxDataIn.Location = new System.Drawing.Point(541, 132);
             this.tBoxDataIn.Multiline = true;
             this.tBoxDataIn.Name = "tBoxDataIn";
-            this.tBoxDataIn.Size = new System.Drawing.Size(209, 225);
+            this.tBoxDataIn.Size = new System.Drawing.Size(199, 182);
             this.tBoxDataIn.TabIndex = 12;
             this.tBoxDataIn.Text = "   ";
-            // 
-            // cBoxSendFormat
-            // 
-            this.cBoxSendFormat.FormattingEnabled = true;
-            this.cBoxSendFormat.Items.AddRange(new object[] {
-            "Hex",
-            "ASCII",
-            "Binary"});
-            this.cBoxSendFormat.Location = new System.Drawing.Point(387, 12);
-            this.cBoxSendFormat.Name = "cBoxSendFormat";
-            this.cBoxSendFormat.Size = new System.Drawing.Size(121, 21);
-            this.cBoxSendFormat.TabIndex = 14;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(298, 15);
+            this.label6.Location = new System.Drawing.Point(6, 18);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(67, 13);
             this.label6.TabIndex = 13;
             this.label6.Text = "Send Format";
             // 
-            // cBoxReceiveFormat
-            // 
-            this.cBoxReceiveFormat.FormattingEnabled = true;
-            this.cBoxReceiveFormat.Items.AddRange(new object[] {
-            "Hex",
-            "ASCII",
-            "Binary"});
-            this.cBoxReceiveFormat.Location = new System.Drawing.Point(660, 12);
-            this.cBoxReceiveFormat.Name = "cBoxReceiveFormat";
-            this.cBoxReceiveFormat.Size = new System.Drawing.Size(121, 21);
-            this.cBoxReceiveFormat.TabIndex = 16;
-            // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(571, 15);
+            this.label7.Location = new System.Drawing.Point(6, 16);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(82, 13);
             this.label7.TabIndex = 15;
             this.label7.Text = "Receive Format";
             // 
+            // rButtonReceiveHex
+            // 
+            this.rButtonReceiveHex.AutoSize = true;
+            this.rButtonReceiveHex.Location = new System.Drawing.Point(108, 14);
+            this.rButtonReceiveHex.Name = "rButtonReceiveHex";
+            this.rButtonReceiveHex.Size = new System.Drawing.Size(44, 17);
+            this.rButtonReceiveHex.TabIndex = 16;
+            this.rButtonReceiveHex.TabStop = true;
+            this.rButtonReceiveHex.Text = "Hex";
+            this.rButtonReceiveHex.UseVisualStyleBackColor = true;
+            this.rButtonReceiveHex.CheckedChanged += new System.EventHandler(this.rButtonReceiveHex_CheckedChanged);
+            // 
+            // rButtonReceiveAscii
+            // 
+            this.rButtonReceiveAscii.AutoSize = true;
+            this.rButtonReceiveAscii.Location = new System.Drawing.Point(108, 50);
+            this.rButtonReceiveAscii.Name = "rButtonReceiveAscii";
+            this.rButtonReceiveAscii.Size = new System.Drawing.Size(52, 17);
+            this.rButtonReceiveAscii.TabIndex = 17;
+            this.rButtonReceiveAscii.TabStop = true;
+            this.rButtonReceiveAscii.Text = "ASCII";
+            this.rButtonReceiveAscii.UseVisualStyleBackColor = true;
+            this.rButtonReceiveAscii.CheckedChanged += new System.EventHandler(this.rButtonReceiveAscii_CheckedChanged);
+            // 
+            // rButtonReceiveBinary
+            // 
+            this.rButtonReceiveBinary.AutoSize = true;
+            this.rButtonReceiveBinary.Location = new System.Drawing.Point(110, 84);
+            this.rButtonReceiveBinary.Name = "rButtonReceiveBinary";
+            this.rButtonReceiveBinary.Size = new System.Drawing.Size(54, 17);
+            this.rButtonReceiveBinary.TabIndex = 18;
+            this.rButtonReceiveBinary.TabStop = true;
+            this.rButtonReceiveBinary.Text = "Binary";
+            this.rButtonReceiveBinary.UseVisualStyleBackColor = true;
+            this.rButtonReceiveBinary.CheckedChanged += new System.EventHandler(this.rButtonReceiveBinary_CheckedChanged);
+            // 
+            // rButtonSendBinary
+            // 
+            this.rButtonSendBinary.AutoSize = true;
+            this.rButtonSendBinary.Location = new System.Drawing.Point(121, 86);
+            this.rButtonSendBinary.Name = "rButtonSendBinary";
+            this.rButtonSendBinary.Size = new System.Drawing.Size(54, 17);
+            this.rButtonSendBinary.TabIndex = 21;
+            this.rButtonSendBinary.TabStop = true;
+            this.rButtonSendBinary.Text = "Binary";
+            this.rButtonSendBinary.UseVisualStyleBackColor = true;
+            this.rButtonSendBinary.CheckedChanged += new System.EventHandler(this.rButtonSendBinary_CheckedChanged);
+            // 
+            // rButtonSendAscii
+            // 
+            this.rButtonSendAscii.AutoSize = true;
+            this.rButtonSendAscii.Location = new System.Drawing.Point(121, 51);
+            this.rButtonSendAscii.Name = "rButtonSendAscii";
+            this.rButtonSendAscii.Size = new System.Drawing.Size(52, 17);
+            this.rButtonSendAscii.TabIndex = 20;
+            this.rButtonSendAscii.TabStop = true;
+            this.rButtonSendAscii.Text = "ASCII";
+            this.rButtonSendAscii.UseVisualStyleBackColor = true;
+            this.rButtonSendAscii.CheckedChanged += new System.EventHandler(this.rButtonSendAscii_CheckedChanged);
+            // 
+            // rButtonSendHex
+            // 
+            this.rButtonSendHex.AutoSize = true;
+            this.rButtonSendHex.Location = new System.Drawing.Point(121, 18);
+            this.rButtonSendHex.Name = "rButtonSendHex";
+            this.rButtonSendHex.Size = new System.Drawing.Size(44, 17);
+            this.rButtonSendHex.TabIndex = 19;
+            this.rButtonSendHex.TabStop = true;
+            this.rButtonSendHex.Text = "Hex";
+            this.rButtonSendHex.UseVisualStyleBackColor = true;
+            this.rButtonSendHex.CheckedChanged += new System.EventHandler(this.rButtonSendHex_CheckedChanged);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.label7);
+            this.groupBox1.Controls.Add(this.rButtonReceiveHex);
+            this.groupBox1.Controls.Add(this.rButtonReceiveAscii);
+            this.groupBox1.Controls.Add(this.rButtonReceiveBinary);
+            this.groupBox1.Location = new System.Drawing.Point(541, 15);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(199, 111);
+            this.groupBox1.TabIndex = 22;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "groupBox1";
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.rButtonSendAscii);
+            this.groupBox2.Controls.Add(this.label6);
+            this.groupBox2.Controls.Add(this.rButtonSendBinary);
+            this.groupBox2.Controls.Add(this.rButtonSendHex);
+            this.groupBox2.Location = new System.Drawing.Point(301, 12);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(200, 111);
+            this.groupBox2.TabIndex = 23;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "groupBox2";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(838, 364);
-            this.Controls.Add(this.cBoxReceiveFormat);
-            this.Controls.Add(this.label7);
-            this.Controls.Add(this.cBoxSendFormat);
-            this.Controls.Add(this.label6);
+            this.ClientSize = new System.Drawing.Size(758, 352);
+            this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.tBoxDataIn);
             this.Controls.Add(this.buttonClose);
             this.Controls.Add(this.buttonSend);
@@ -267,6 +347,10 @@ namespace ComPort
             this.Name = "MainForm";
             this.Text = "MainForm";
             this.Load += new System.EventHandler(this.MainForm_Load);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -289,9 +373,15 @@ namespace ComPort
         private System.Windows.Forms.Button buttonSend;
         private System.Windows.Forms.Button buttonClose;
         private System.Windows.Forms.TextBox tBoxDataIn;
-        private System.Windows.Forms.ComboBox cBoxSendFormat;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.ComboBox cBoxReceiveFormat;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.RadioButton rButtonReceiveHex;
+        private System.Windows.Forms.RadioButton rButtonReceiveAscii;
+        private System.Windows.Forms.RadioButton rButtonReceiveBinary;
+        private System.Windows.Forms.RadioButton rButtonSendBinary;
+        private System.Windows.Forms.RadioButton rButtonSendAscii;
+        private System.Windows.Forms.RadioButton rButtonSendHex;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox groupBox2;
     }
 }

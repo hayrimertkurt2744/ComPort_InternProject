@@ -12,17 +12,23 @@ namespace ComPort
 
         public SerialPort serialPort;
         public string[] ports;
-        string dataFormat;
+        public string dataFormat;
+        //string formattedData;
+        //public string formattedString;
         List<int> dataBuffer = new List<int>();
 
-        public EventHandler<string> dataReceivedEventHandler;
+        public event EventHandler<string> dataReceivedEventHandler;
+        
 
-        public SerialCommunications(string _PortName, string _BaudRate, string _DataBits, string _StopBitsText, string _ParityText,string _DataFormat)//constructor
+        public SerialCommunications(string _PortName, string _BaudRate, string _DataBits, string _StopBitsText, string _ParityText/*, cBoxReceiveFormat.Text*/)//constructor
         {
             serialPort = new SerialPort();
+           
+            
+           
+            //dataFormat = _DataFormat;
+            
             serialPort.DataReceived += DataReceivedFunction;
-            dataFormat = _DataFormat;
-
             serialPort.PortName = _PortName;
             serialPort.BaudRate = Convert.ToInt32(_BaudRate);
             serialPort.DataBits = Convert.ToInt32(_DataBits);
@@ -32,10 +38,9 @@ namespace ComPort
 
         }
 
-        private void DataReceivedFunction(object sender, SerialDataReceivedEventArgs e)
+        public void DataReceivedFunction(object sender, SerialDataReceivedEventArgs e)
         {
-            string readData =  serialPort.ReadExisting();
-            
+            string readData = serialPort.ReadExisting();
             
             
             dataReceivedEventHandler.Invoke(this, /*DataFormat(dataInDec,dataFormat)*/readData);
@@ -50,7 +55,7 @@ namespace ComPort
         }
         public void ClosePort()
         {
-            if (serialPort.IsOpen==true)
+            if (serialPort.IsOpen)
             {
                 serialPort.Close();
             }
@@ -70,31 +75,61 @@ namespace ComPort
         {
             return SerialPort.GetPortNames();
         }
-        public string DataFormat(int[] dataInput,string dataFormat) 
+        public /*void*/string DataFormat(/*object sender,*/ string dataFormat) 
         {
             string strOut = "";
-
+            
+            /*
             if (dataFormat=="Hex")
             {
-                foreach (int element in dataInput)
+                foreach (int element in TakeDataBufferInDec())
                 {
                     strOut += Convert.ToString(element, 16) + "\t";
                 }
             }
             else if(dataFormat == "Binary")
             {
-                foreach (int element in dataInput)
+                foreach (int element in TakeDataBufferInDec())
                 {
                     strOut += Convert.ToString(element, 2) + "\t";
                 }
             }
             else if (dataFormat == "ASCII")
             {
-                foreach (int element in dataInput)
+                foreach (int element in TakeDataBufferInDec())
                 {
                     strOut += Convert.ToChar(element) + "\t";
                 }
+            }*/
+
+            switch (dataFormat)
+            {
+                case "Hex":
+                    foreach (int element in TakeDataBufferInDec())
+                    {
+                        strOut += Convert.ToString(element, 16) + "\t";
+                    }
+                    break;
+
+                case "Binary":
+                    foreach (int element in TakeDataBufferInDec())
+                    {
+                        strOut += Convert.ToString(element, 2) + "\t";
+                    }
+                    break;
+
+                case "ASCII":
+                    foreach (int element in TakeDataBufferInDec())
+                    {
+                        strOut += Convert.ToChar(element) + "\t";
+                    }
+                    break;
+
+                default:
+                    Console.WriteLine("There is no chosen option");
+                    break;
             }
+            /*strOut = formattedString;*/
             return strOut;
         }
         public int[] TakeDataBufferInDec() 
@@ -104,22 +139,24 @@ namespace ComPort
 
             int[] dataInDec = new int[dataInLength];
             dataInDec = dataBuffer.ToArray();
-
-            while (serialPort.BytesToRead > 0)
+            if (serialPort.IsOpen)
             {
-                try
+                while (serialPort.BytesToRead > 0)
                 {
-                    dataBuffer.Add(serialPort.ReadByte());
-                }
-                catch (Exception error)
-                {
-                    Console.WriteLine(error.Message);
+                    try
+                    {
+                        dataBuffer.Add(serialPort.ReadByte());
+                    }
+                    catch (Exception error)
+                    {
+                        Console.WriteLine(error.Message);
 
+                    }
                 }
             }
+           
             return dataInDec;
         }
-
-        
+       
     }
 }
