@@ -13,8 +13,9 @@ namespace ComPort
     public partial class MainForm : Form
     {
         SerialCommunications comm;
+        TypeConversion conversion;
         string previousType="Ascii";
-        int receiveTypeController;
+        
         public MainForm()
         {
             InitializeComponent();
@@ -24,6 +25,7 @@ namespace ComPort
             if(cBoxCOMPort.Items.Count != 0)
                 cBoxCOMPort.SelectedIndex = 0;
             comm = new SerialCommunications(cBoxCOMPort.Text, cBoxBaudRate.Text, cBoxDataBit.Text, cBoxStopBit.Text, cBoxParityBit.Text);
+            conversion = new TypeConversion();
 
         }
 
@@ -47,7 +49,7 @@ namespace ComPort
         private void ShowData(object sender, string dataIn)
         {
             
-            tBoxDataIn.Text += comm.FormatReceivedData(dataIn,receiveTypeController);
+            tBoxDataIn.Text += conversion.FormatReceivedData(dataIn);
 
 
         }
@@ -61,23 +63,26 @@ namespace ComPort
         private void buttonSend_Click(object sender, EventArgs e)
         {
             
-            comm.SendData(comm.FormatSendingData(tBoxDataOut.Text,previousType));
+            comm.SendData(conversion.FormatSendingData(tBoxDataOut.Text,previousType));
            
         }
         private void rButtonReceiveHex_CheckedChanged(object sender, EventArgs e)
         {
-            receiveTypeController = 0;
+            //receiveTypeController = 0;
+            conversion.dataType = TypeConversion.DataType.Hex;
 
         }
 
         private void rButtonReceiveAscii_CheckedChanged(object sender, EventArgs e)
         {
-            receiveTypeController = 1;
+            // receiveTypeController = 1;
+            conversion.dataType =  TypeConversion.DataType.Ascii;
         }
 
         private void rButtonReceiveBinary_CheckedChanged(object sender, EventArgs e)
         {
-            receiveTypeController = 2;
+            //receiveTypeController = 2;
+            conversion.dataType =  TypeConversion.DataType.Binary;
         }
 
 
@@ -85,31 +90,7 @@ namespace ComPort
         {
             try
             {
-                if (previousType == "Hex")
-                {
-                    Console.WriteLine("same type");
-
-                }
-                else if (previousType == "Ascii")
-                {
-                    byte[] ba = Encoding.Default.GetBytes(tBoxDataOut.Text);
-                    var hexString = BitConverter.ToString(ba);
-                    hexString = hexString.Replace("-", "");
-
-                    tBoxDataOut.Text = hexString;
-                }
-                else if (previousType == "Binary")
-                {
-
-                    string dataAscii = BinaryToASCII(tBoxDataOut.Text);
-
-                    byte[] ba = Encoding.Default.GetBytes(dataAscii);
-                    var hexString = BitConverter.ToString(ba);
-                    hexString = hexString.Replace("-", "");
-
-                    tBoxDataOut.Text = hexString;
-
-                }
+                tBoxDataOut.Text = conversion.ConvertToHex(tBoxDataOut.Text, previousType);
                 previousType = "Hex";
             }
             catch (Exception)
@@ -125,61 +106,14 @@ namespace ComPort
         {
             try
             {
-                if (previousType == "Ascii")
-                {
-
-                }
-                else if (previousType == "Hex")
-                {
-                    string hex = tBoxDataOut.Text;
-
-                    String ascii = "";
-                    for (int i = 0; i < hex.Length; i += 2)
-                    {
-                        String part = hex.Substring(i, 2);
-                        char ch = (char)Convert.ToInt32(part, 16); ;
-                        ascii = ascii + ch;
-                    }
-                    tBoxDataOut.Text = ascii;
-
-                }
-                else if (previousType == "Binary")
-                {
-                    tBoxDataOut.Text= BinaryToASCII(tBoxDataOut.Text);
-                }
+                tBoxDataOut.Text = conversion.ConvertToAscii(tBoxDataOut.Text, previousType);
+                previousType = "Ascii";
             }
             catch (Exception)
             {
                 MessageBox.Show("Invalid Conversion Type");
-                
-            }
-           
-            previousType = "Ascii";
-        }
-        public static string BinaryToASCII(string bin)
-        {
-            bin = bin.Replace(" ", "");
-            string ascii = string.Empty;
-
-            for (int i = 0; i < bin.Length; i += 8)
-            {
-                ascii += (char)BinaryToDecimal(bin.Substring(i, 8));
             }
 
-            return ascii;
-        }
-
-        private static int BinaryToDecimal(string bin)
-        {
-            int binLength = bin.Length;
-            double dec = 0;
-
-            for (int i = 0; i < binLength; ++i)
-            {
-                dec += ((byte)bin[i] - 48) * Math.Pow(2, ((binLength - i) - 1));
-            }
-
-            return (int)dec;
         }
 
 
@@ -187,44 +121,15 @@ namespace ComPort
         {
             try
             {
-                if (previousType == "Binary")
-                {
-                    previousType = "Binary";
-                }
-                else if (previousType == "Hex")
-                {
-                    string hex = tBoxDataOut.Text;
-                    String ascii = "";
-                    for (int i = 0; i < hex.Length; i += 2)
-                    {
-                        String part = hex.Substring(i, 2);
-                        char ch = (char)Convert.ToInt32(part, 16); ;
-                        ascii = ascii + ch;
-                    }
-                    byte[] da = Encoding.Default.GetBytes(ascii);
-                    string formattedDataIn = string.Join("  ", da.Select(byt => Convert.ToString(byt, 2).PadLeft(8, '0')));
-                    tBoxDataOut.Text = formattedDataIn;
-                    previousType = "Binary";
-                }
-                else if (previousType == "Ascii")
-                {
-                    byte[] da = Encoding.Default.GetBytes(tBoxDataOut.Text);
-                    string formattedDataIn = string.Join("  ", da.Select(byt => Convert.ToString(byt, 2).PadLeft(8, '0')));
-                    tBoxDataOut.Text = formattedDataIn;
-                    previousType = "Binary";
-                }
+                tBoxDataOut.Text = conversion.ConvertToBinary(tBoxDataOut.Text, previousType);
                 previousType = "Binary";
             }
             catch (Exception)
             {
-
                 MessageBox.Show("Invalid Conversion Type");
-
             }
-            
-            
-            
+    
         }
-        
+
     }
 }
