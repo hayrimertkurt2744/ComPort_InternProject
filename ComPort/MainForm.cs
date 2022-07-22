@@ -14,8 +14,6 @@ namespace ComPort
     {
         SerialCommunications comm;
         TypeConversion conversion;
-        //string previousType="Ascii";
-        
         public MainForm()
         {
             InitializeComponent();
@@ -68,8 +66,6 @@ namespace ComPort
         {
             Control.CheckForIllegalCrossThreadCalls = false;
             buttonClose.Enabled = false;
-            //conversion.previousDataType = TypeConversion.PreviousDataType.Ascii;
-
         }
         private void buttonSend_Click(object sender, EventArgs e)
         {
@@ -79,20 +75,16 @@ namespace ComPort
         }
         private void rButtonReceiveHex_CheckedChanged(object sender, EventArgs e)
         {
-            //receiveTypeController = 0;
             conversion.dataType = TypeConversion.DataType.Hex;
-
         }
 
         private void rButtonReceiveAscii_CheckedChanged(object sender, EventArgs e)
         {
-            // receiveTypeController = 1;
             conversion.dataType =  TypeConversion.DataType.Ascii;
         }
 
         private void rButtonReceiveBinary_CheckedChanged(object sender, EventArgs e)
         {
-            //receiveTypeController = 2;
             conversion.dataType =  TypeConversion.DataType.Binary;
         }
 
@@ -102,14 +94,11 @@ namespace ComPort
             try
             {
                 tBoxDataOut.Text = conversion.ConvertToHex(tBoxDataOut.Text);
-                //previousType = "Hex";
                 conversion.previousDataType = TypeConversion.PreviousDataType.Hex;
             }
             catch (Exception)
             {
-
                 MessageBox.Show("Invalid Conversion Type");
-
             }
            
         }
@@ -119,7 +108,6 @@ namespace ComPort
             try
             {
                 tBoxDataOut.Text = conversion.ConvertToAscii(tBoxDataOut.Text);
-                //previousType = "Ascii";
                 conversion.previousDataType = TypeConversion.PreviousDataType.Ascii;
             }
             catch (Exception)
@@ -135,7 +123,6 @@ namespace ComPort
             try
             {
                 tBoxDataOut.Text = conversion.ConvertToBinary(tBoxDataOut.Text);
-                //previousType = "Binary";
                 conversion.previousDataType = TypeConversion.PreviousDataType.Binary;
             }
             catch (Exception)
