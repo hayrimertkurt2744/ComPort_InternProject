@@ -20,15 +20,17 @@ namespace ComPort
 
         public SerialCommunications(string _PortName, string _BaudRate, string _DataBits, string _StopBitsText, string _ParityText)//constructor
         {
-            serialPort = new SerialPort();
-     
-            serialPort.DataReceived += DataReceivedFunction;
-            serialPort.PortName = _PortName;
-            serialPort.BaudRate = Convert.ToInt32(_BaudRate);
-            serialPort.DataBits = Convert.ToInt32(_DataBits);
-            serialPort.StopBits = (StopBits)Enum.Parse(typeof(StopBits), _StopBitsText);
-            serialPort.Parity = (Parity)Enum.Parse(typeof(Parity), _ParityText);
+                serialPort = new SerialPort();
+           
+                serialPort.DataReceived += DataReceivedFunction;
+                serialPort.PortName = _PortName;
+                serialPort.BaudRate = Convert.ToInt32(_BaudRate);
+                serialPort.DataBits = Convert.ToInt32(_DataBits);
+                serialPort.StopBits = (StopBits)Enum.Parse(typeof(StopBits), _StopBitsText);
+                serialPort.Parity = (Parity)Enum.Parse(typeof(Parity), _ParityText);
 
+           
+           
 
         }
 

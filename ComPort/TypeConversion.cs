@@ -22,7 +22,7 @@ namespace ComPort
             Binary
         }
         public DataType dataType;
-        public PreviousDataType previousDataType;
+        public PreviousDataType previousDataType =PreviousDataType.Ascii;
 
         public string FormatReceivedData(string dataIn)
         {
@@ -121,11 +121,14 @@ namespace ComPort
         }
         public string ConvertToBinary(string _DataOut) 
         {
+            
             string _previousType = previousDataType.ToString();
 
             if (_previousType == "Binary")
             {
-                _previousType = "Binary";
+                //_previousType = "Binary";
+                previousDataType = PreviousDataType.Binary;
+
             }
             else if (_previousType == "Hex")
             {
@@ -140,17 +143,20 @@ namespace ComPort
                 byte[] da = Encoding.Default.GetBytes(ascii);
                 string formattedDataIn = string.Join("  ", da.Select(byt => Convert.ToString(byt, 2).PadLeft(8, '0')));
                 _DataOut = formattedDataIn;
-                _previousType = "Binary";
+                //_previousType = "Binary";
+                previousDataType = PreviousDataType.Binary;
             }
             else if (_previousType == "Ascii")
             {
                 byte[] da = Encoding.Default.GetBytes(_DataOut);
                 string formattedDataIn = string.Join("  ", da.Select(byt => Convert.ToString(byt, 2).PadLeft(8, '0')));
                 _DataOut = formattedDataIn;
-                _previousType = "Binary";
+                //_previousType = "Binary";
+                previousDataType = PreviousDataType.Binary;
             }
-            _previousType = "Binary";
-            currentConversionType = _previousType;
+            //_previousType = "Binary";
+            previousDataType = PreviousDataType.Binary;
+            //currentConversionType = _previousType;
             
             return _DataOut;
             
@@ -162,7 +168,8 @@ namespace ComPort
            
             if (_previousType == "Ascii")
             {
-                _previousType = "Ascii";
+                //_previousType = "Ascii";
+                previousDataType = PreviousDataType.Ascii;
             }
             else if (_previousType == "Hex")
             {
@@ -176,14 +183,16 @@ namespace ComPort
                     ascii = ascii + ch;
                 }
                 _DataOut = ascii;
-                _previousType = "Ascii";
+                //_previousType = "Ascii";
+                previousDataType = PreviousDataType.Ascii;
 
             }
             else if (_previousType == "Binary")
             {
                 _DataOut = BinaryToASCII(_DataOut);
 
-                _previousType = "Ascii";
+                //_previousType = "Ascii";
+                previousDataType = PreviousDataType.Ascii;
             }
             return _DataOut;
 
@@ -193,9 +202,11 @@ namespace ComPort
         public string ConvertToHex(string _DataOut)
         {
             string _previousType = previousDataType.ToString();
+
             if (_previousType == "Hex")
             {
                 Console.WriteLine("same type");
+                previousDataType = PreviousDataType.Hex;
 
             }
             else if (_previousType == "Ascii")
@@ -203,8 +214,8 @@ namespace ComPort
                 byte[] ba = Encoding.Default.GetBytes(_DataOut);
                 var hexString = BitConverter.ToString(ba);
                 hexString = hexString.Replace("-", "");
-
                 _DataOut = hexString;
+                previousDataType = PreviousDataType.Hex;
             }
             else if (_previousType == "Binary")
             {
@@ -214,8 +225,8 @@ namespace ComPort
                 byte[] ba = Encoding.Default.GetBytes(dataAscii);
                 var hexString = BitConverter.ToString(ba);
                 hexString = hexString.Replace("-", "");
-
                 _DataOut = hexString;
+                previousDataType = PreviousDataType.Hex;
 
             }
             
